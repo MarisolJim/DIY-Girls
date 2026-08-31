@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My AI Assistant Builder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ==============================================
+           STUDENTS: CUSTOMIZE THESE COLORS & FONTS!
+           Change a value, save, and refresh to see it.
+           ============================================== */
+        :root {
+            /* Your assistant's main colors */
+            --primary-color: #8b5cff;   /* main brand violet   */
+            --secondary-color: #e05cc8; /* pink partner color  */
+            --accent: #ffd166;          /* highlight / glow     */
+
+            /* Backgrounds & text */
+            --background: #0f1030;      /* page background      */
+            --surface: #1b1d44;         /* cards & panels       */
+            --surface-2: #262a5a;       /* inputs & inner areas */
+            --text-primary: #f2f1ff;    /* main text            */
+            --text-secondary: #a7abdb;  /* softer labels        */
+
+            /* The emoji your assistant uses as its face */
+            --bot-face: "🤖";
+
+            /* Motion */
+            --transition-speed: 0.25s;
+
+            /* (You usually don't need to touch these) */
+            --brand-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            /* Soft glowing background so the page feels alive */
+            background:
+                radial-gradient(60rem 60rem at 12% -10%, rgba(139, 92, 255, 0.35), transparent 60%),
+                radial-gradient(50rem 50rem at 110% 10%, rgba(224, 92, 200, 0.28), transparent 55%),
+                radial-gradient(45rem 45rem at 50% 120%, rgba(255, 209, 102, 0.14), transparent 60%),
+                var(--background);
+            background-attachment: fixed;
+        }
+
+        /* ---------------- Header ---------------- */
+        .header {
+            position: relative;
+            overflow: hidden;
+            padding: 2.5rem 2rem 2.75rem;
+            text-align: center;
+            background: var(--brand-gradient);
+            border-bottom: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        /* A slow shine sweeping across the header for personality */
+        .header::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%);
+            transform: translateX(-120%);
+            animation: shine 6s ease-in-out infinite;
+        }
+
+        @keyframes shine {
+            0%, 60% { transform: translateX(-120%); }
+            85%, 100% { transform: translateX(120%); }
+        }
+
+        .header__badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 74px;
+            height: 74px;
+            margin-bottom: 0.75rem;
+            font-size: 2.4rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.16);
+            box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35), 0 8px 20px rgba(0, 0, 0, 0.3);
+            animation: float 4s ease-in-out infinite;
+        }
+        .header__badge::before { content: var(--bot-face); }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-7px); }
+        }
+
+        .header h1 {
+            position: relative;
+            font-family: 'Baloo 2', 'Nunito', sans-serif;
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            position: relative;
+            font-size: 1.05rem;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+
+        .header__status {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            margin-top: 0.6rem;
+            padding: 0.25rem 0.8rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        .header__status::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #43f5a0;
+            box-shadow: 0 0 0 0 rgba(67, 245, 160, 0.7);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(67, 245, 160, 0.7); }
+            70% { box-shadow: 0 0 0 8px rgba(67, 245, 160, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(67, 245, 160, 0); }
+        }
+
+        /* ---------------- Layout ---------------- */
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 3rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Glassy card look shared by the panels */
+        .config-panel,
+        .chat-container {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)), var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(6px);
+        }
+
+        .config-panel {
+            padding: 1.75rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .config-panel h2 {
+            font-family: 'Baloo 2', 'Nunito', sans-serif;
+            font-size: 1.45rem;
+            margin-bottom: 1.1rem;
+            background: var(--brand-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .config-section {
+            margin-bottom: 1.35rem;
+        }
+
+        .config-section label {
+            display: block;
+            margin-bottom: 0.45rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .config-section input,
+        .config-section textarea {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            background: var(--surface-2);
+            border: 1.5px solid transparent;
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed), background var(--transition-speed);
+        }
+
+        .config-section input::placeholder,
+        .config-section textarea::placeholder {
+            color: rgba(167, 171, 219, 0.6);
+        }
+
+        .config-section input:focus,
+        .config-section textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: #20244f;
+            box-shadow: 0 0 0 4px rgba(139, 92, 255, 0.22);
+        }
+
+        .config-section textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.55;
+        }
+
+        /* ---------------- Info box ---------------- */
+        .info-box {
+            background: linear-gradient(135deg, rgba(139, 92, 255, 0.18), rgba(224, 92, 200, 0.14));
+            border: 1px solid rgba(139, 92, 255, 0.4);
+            border-radius: 14px;
+            padding: 1rem 1.1rem;
+            margin-bottom: 1.35rem;
+            color: var(--text-secondary);
+            font-size: 0.97rem;
+        }
+
+        .info-box strong {
+            color: var(--text-primary);
+        }
+
+        /* ---------------- Chat ---------------- */
+        .chat-container {
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 540px;
+        }
+
+        .messages {
+            flex: 1;
+            padding: 1.5rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+
+        .message {
+            position: relative;
+            padding: 0.9rem 1.15rem;
+            border-radius: 18px;
+            max-width: 78%;
+            font-size: 1rem;
+            animation: pop 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+            word-wrap: break-word;
+        }
+
+        @keyframes pop {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* User bubble — brand gradient, tucked to the right */
+        .message.user {
+            align-self: flex-end;
+            margin-left: auto;
+            background: var(--brand-gradient);
+            color: #fff;
+            font-weight: 600;
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 8px 18px rgba(139, 92, 255, 0.35);
+        }
+
+        /* Assistant bubble — glassy card with a floating avatar face */
+        .message.assistant {
+            align-self: flex-start;
+            margin-left: 52px;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 6px;
+        }
+        .message.assistant::before {
+            content: var(--bot-face);
+            position: absolute;
+            left: -52px;
+            top: -2px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            border-radius: 50%;
+            background: var(--brand-gradient);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+        }
+
+        .message.system {
+            align-self: center;
+            text-align: center;
+            max-width: 100%;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px dashed var(--border);
+            border-radius: 999px;
+            padding: 0.4rem 1rem;
+        }
+
+        /* ---------------- Input area ---------------- */
+        .input-area {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1.1rem 1.25rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-top: 1px solid var(--border);
+        }
+
+        .input-area input {
+            flex: 1;
+            padding: 0.9rem 1.1rem;
+            background: var(--surface-2);
+            border: 1.5px solid transparent;
+            border-radius: 999px;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        .input-area input::placeholder { color: rgba(167, 171, 219, 0.6); }
+
+        .input-area input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(139, 92, 255, 0.22);
+        }
+
+        button {
+            padding: 0.9rem 1.7rem;
+            background: var(--brand-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.4px;
+            cursor: pointer;
+            transition: transform var(--transition-speed), box-shadow var(--transition-speed), opacity var(--transition-speed);
+            box-shadow: 0 8px 18px rgba(139, 92, 255, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(224, 92, 200, 0.45);
+        }
+
+        button:active { transform: translateY(0); }
+
+        button:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* ---------------- Typing indicator ---------------- */
+        /* Three bouncing dots (styled from the .loading span the script adds) */
+        .loading {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 3px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            animation: bounce 1s infinite ease-in-out;
+            box-shadow:
+                14px 0 0 var(--secondary-color),
+                28px 0 0 var(--accent);
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: 0.6; }
+            40% { transform: translateY(-6px); opacity: 1; }
+        }
+
+        /* ---------------- Scrollbar ---------------- */
+        .messages::-webkit-scrollbar { width: 9px; }
+        .messages::-webkit-scrollbar-track { background: transparent; }
+        .messages::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 255, 0.5);
+            border-radius: 999px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+        .messages::-webkit-scrollbar-thumb:hover { background: rgba(224, 92, 200, 0.7); background-clip: padding-box; }
+
+        /* ---------------- Markdown content ---------------- */
+        .message.assistant h1, .message.assistant h2, .message.assistant h3 {
+            font-family: 'Baloo 2', 'Nunito', sans-serif;
+            margin: 0.5rem 0 0.25rem;
+            color: var(--accent);
+        }
+        .message.assistant p { margin-bottom: 0.5rem; }
+        .message.assistant p:last-child { margin-bottom: 0; }
+        .message.assistant ul, .message.assistant ol { margin: 0.25rem 0 0.5rem 1.25rem; }
+        .message.assistant code {
+            background: rgba(255, 255, 255, 0.12);
+            padding: 0.1em 0.35em;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .message.assistant pre {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.8rem;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 0.5rem 0;
+            border: 1px solid var(--border);
+        }
+        .message.assistant pre code { background: none; padding: 0; }
+
+        /* ---------------- Small screens ---------------- */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 2rem; }
+            .message { max-width: 88%; }
+            .input-area { flex-direction: column; }
+            button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- ==============================================
+         STUDENTS: EDIT THIS HEADER!
+         ============================================== -->
+    <div class="header">
+        <div class="header__badge" aria-hidden="true"></div>
+        <h1>Chatbot</h1>
+        <p>Built by: [Student Name]</p>
+        <span class="header__status">Online &amp; ready</span>
+    </div>
+
+    <div class="container">
+        <!-- Configuration Panel -->
+        <div class="config-panel">
+            <h2>⚙️ Configure Your Assistant</h2>
+
+            <div class="info-box">
+                <strong>Instructions:</strong> Fill in these fields to customize how your AI assistant behaves.
+                Your name is Alice and you are an algebra tutor. Any questions that gets asked should recieve step by step instructions. You only respond to Algebra questions.
+            </div>
+
+            <div class="config-section">
+                <label for="assistantName">Assistant Name:</label>
+                <input
+                    type="text"
+                    id="assistantName"
+                    placeholder="e.g., TrailGuide, StudyBuddy, CampingPro"
+                    value="MyAssistant"
+                >
+            </div>
+
+            <div class="config-section">
+                <label for="systemPrompt">System Prompt (What should your assistant do?):</label>
+                <textarea
+                    id="systemPrompt"
+                    placeholder="Example: You are a helpful trail safety advisor. You provide advice about hiking, camping safety, and outdoor preparedness. Always be encouraging and emphasize safety first."
+                >You're name is Alice and you are an algebra tutor. Any questions that gets asked should recieve step by step instructions. You only respond to Algebra questions. </textarea>
+            </div>
+
+            <div class="config-section">
+                <label for="welcomeMessage">Welcome Message:</label>
+                <input
+                    type="text"
+                    id="welcomeMessage"
+                    placeholder="What should your assistant say when it starts?"
+                    value="Hello! How can I help you today?"
+                >
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="chat-container">
+            <div class="messages" id="messages">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="input-area">
+                <input
+                    type="text"
+                    id="userInput"
+                    placeholder="Type your message here..."
+                    onkeypress="if(event.key === 'Enter') sendMessage()"
+                >
+                <button onclick="sendMessage()" id="sendBtn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        // ==============================================
+        // STUDENTS: This is where the AI magic happens!
+        // You don't need to modify this code, but you can
+        // read through it to understand how it works.
+        // ==============================================
+
+        // ==============================================
+        // CONNECTION SETTING — paste your proxy URL here once.
+        // The secret API key lives on the proxy server, never in
+        // this file, so nobody using the page can see it.
+        // ==============================================
+        const PROXY_URL = ""; // e.g. "https://tumo-bot.yourname.workers.dev"
+
+        let conversationHistory = [];
+
+        // Initialize the chat with welcome message
+        function initialize() {
+            const welcomeMsg = document.getElementById('welcomeMessage').value;
+            addMessage('system', 'Assistant initialized! Click "Send" to start chatting.');
+            addMessage('assistant', welcomeMsg);
+        }
+
+        // Add a message to the chat
+        function addMessage(type, content) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            if (type === 'assistant') {
+                messageDiv.innerHTML = marked.parse(content);
+            } else {
+                messageDiv.textContent = content;
+            }
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Send a message to the AI
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Make sure the proxy has been set up.
+            if (!PROXY_URL) {
+                addMessage('system', 'Not connected yet: paste your proxy URL into PROXY_URL near the top of the script.');
+                return;
+            }
+
+            // Disable input while processing
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            input.disabled = true;
+
+            // Add user message to chat
+            addMessage('user', message);
+            input.value = '';
+
+            // Add to conversation history
+            conversationHistory.push({
+                role: 'user',
+                content: message
+            });
+
+            // Show loading indicator
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'message assistant';
+            loadingDiv.innerHTML = '<span class="loading"></span> Thinking...';
+            document.getElementById('messages').appendChild(loadingDiv);
+
+            try {
+                // Get the system prompt
+                const systemPrompt = document.getElementById('systemPrompt').value;
+
+                // Send the message to the proxy. The proxy adds the secret
+                // API key on its end and forwards the request to Claude.
+                const response = await fetch(PROXY_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-6',
+                        max_tokens: 1000,
+                        system: systemPrompt,
+                        messages: conversationHistory
+                    })
+                });
+
+                // Remove loading indicator
+                loadingDiv.remove();
+
+                if (!response.ok) {
+                    let friendly = `Something went wrong (error ${response.status}).`;
+                    if (response.status === 401 || response.status === 403) {
+                        friendly = "The server couldn't sign in to Claude — check the API key on your proxy.";
+                    } else if (response.status === 429) {
+                        friendly = "Too many messages right now. Wait a few seconds and try again.";
+                    } else if (response.status >= 500) {
+                        friendly = "Claude is having trouble right now. Try again in a moment.";
+                    }
+                    throw new Error(friendly);
+                }
+
+                const data = await response.json();
+                const assistantMessage = data.content[0].text;
+
+                // Add assistant response to chat and history
+                addMessage('assistant', assistantMessage);
+                conversationHistory.push({
+                    role: 'assistant',
+                    content: assistantMessage
+                });
+
+            } catch (error) {
+                loadingDiv.remove();
+                const msg = /fetch/i.test(error.message)
+                    ? "Can't reach the server. Check your internet, or that the proxy URL is correct."
+                    : error.message;
+                addMessage('system', msg);
+                console.error('Error:', error);
+            }
+
+            // Re-enable input
+            sendBtn.disabled = false;
+            input.disabled = false;
+            input.focus();
+        }
+
+        // Initialize when page loads
+        window.onload = initialize;
+    </script>
+</body>
+</html>
