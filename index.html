@@ -545,9 +545,12 @@
             const messagesDiv = document.getElementById('messages');
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${type}`;
-            if (type === 'assistant') {
+            if (type === 'assistant' && window.marked) {
+                // Format the reply (bold, lists, etc.) if the markdown library loaded.
                 messageDiv.innerHTML = marked.parse(content);
             } else {
+                // Fallback: if the library didn't load (e.g. a blocked network),
+                // just show the text plainly so the bot still works.
                 messageDiv.textContent = content;
             }
             messagesDiv.appendChild(messageDiv);
