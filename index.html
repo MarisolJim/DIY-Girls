@@ -26,7 +26,13 @@
             --text-secondary: #a7abdb;  /* softer labels        */
 
             /* The emoji your assistant uses as its face */
-            --bot-face: <img src="https://tse3.mm.bing.net/th/id/OIP.L_5JZLL1ViqkPNbgOQoBDAHaE7?r=0&pid=Api&h=220&P=0&w=300" alt="bot face" style="width: 1.2em; height: 1.2em; display: inline-block; vertical-align: middle;">
+            --bot-face: "🤖";
+            /* Want a picture instead? Comment out the line above, uncomment
+               the line below, and point it at your image file or URL.
+               Then scroll to the two ".header__badge::before" and
+               ".message.assistant::before" rules (search "bot-face") and
+               swap in their commented-out picture versions too. */
+            /* --bot-face: url("assets/bot-face.png"); */
 
             /* Motion */
             --transition-speed: 0.25s;
@@ -100,6 +106,17 @@
             animation: float 4s ease-in-out infinite;
         }
         .header__badge::before { content: var(--bot-face); }
+        /* Picture version: comment out the rule above, uncomment this one
+           (and set --bot-face to a url() above). */
+        /* .header__badge::before {
+            content: "";
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-image: var(--bot-face);
+            background-size: cover;
+            background-position: center;
+        } */
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
@@ -311,6 +328,21 @@
             background: var(--brand-gradient);
             box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
         }
+        /* Picture version: comment out the rule above, uncomment this one
+           (and set --bot-face to a url() above). */
+        /* .message.assistant::before {
+            content: "";
+            position: absolute;
+            left: -52px;
+            top: -2px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-image: var(--bot-face);
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+        } */
 
         .message.system {
             align-self: center;
