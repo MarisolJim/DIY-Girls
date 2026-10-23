@@ -97,13 +97,15 @@
     --text-secondary: #a7abdb;  /* Softer text color (light lavender) for labels and small notes. */
 
     /* ----- The emoji your assistant uses as its face ----- */
-    --bot-face: "🤖";           /* Shown in the round badge at the top AND next to every bot message. Swap in any emoji, like "🦄", "🐱" or "🌟". Keep the quotation marks! */
-    /* Want a picture instead? Comment out the line above, uncomment
-       the line below, and point it at your image file or URL.
-       Then scroll to the two ".header__badge::before" and
-       ".message.assistant::before" rules (search "bot-face") and
-       swap in their commented-out picture versions too. */
-    /* --bot-face: url("assets/bot-face.png"); */
+    /* --bot-face: "🤖"; */       /* Shown in the round badge at the top AND next to every bot message. Swap in any emoji, like "🦄", "🐱" or "🌟". Keep the quotation marks! */
+    /* Want a picture instead?
+       1. Put your image in the "assets" folder (next to index.html).
+       2. Comment out the emoji line above and uncomment the url() line
+          below. Change the file name to match your image EXACTLY.
+       3. Search "Picture version" and uncomment the two rules under it
+          (one for the top badge, one for the bot's messages).
+       To go back to an emoji, undo all three steps. */
+    --bot-face: url("assets/OIP.jpeg"); /* Your picture: the folder name, a slash, then the file name. */
 
     /* ----- Motion ----- */
     --transition-speed: 0.25s;  /* How fast things smoothly change, like a button lifting when you hover over it. Bigger = slower (try 0.6s). */
@@ -197,8 +199,9 @@ body {
     animation: float 4s ease-in-out infinite; /* Runs the "float" animation below so the badge gently bobs up and down. */
 }
 .header__badge::before { content: var(--bot-face); } /* Puts your bot-face emoji (from section 1) inside the circle. */
-/* Picture version: comment out the rule above, uncomment this one
-   (and set --bot-face to a url() above).
+/* Picture version: uncomment the rule below (and set --bot-face to a
+   url() above). You don't need to touch the emoji rule above: this rule
+   comes later in the file, so it wins.
    What it does, line by line:
      content: "";                  -> creates an empty layer to hold the picture
      width / height: 100%;         -> the layer fills the whole circle
@@ -206,7 +209,7 @@ body {
      background-image: ...;        -> shows your picture
      background-size: cover;       -> scales the picture to fill the circle without stretching
      background-position: center;  -> keeps the middle of the picture in the middle */
-/* .header__badge::before {
+.header__badge::before {
     content: "";
     width: 100%;
     height: 100%;
@@ -214,7 +217,7 @@ body {
     background-image: var(--bot-face);
     background-size: cover;
     background-position: center;
-} */
+}
 
 /* The bobbing animation used by the badge. */
 @keyframes float {
@@ -463,12 +466,15 @@ body {
     background: var(--brand-gradient); /* Fills the circle with your brand gradient. */
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35); /* Soft shadow under the circle. */
 }
-/* Picture version: comment out the rule above, uncomment this one
-   (and set --bot-face to a url() above).
+/* Picture version: uncomment the rule below (and set --bot-face to a
+   url() above). Leave the emoji rule above alone: this rule comes later
+   in the file, so it wins. (Don't try to comment out the emoji rule:
+   it has comments inside it, and CSS comments can't go inside other
+   comments.)
    It works like the emoji version, except it shows your picture with
    background-image, and background-size: cover makes the picture fill
    the circle without stretching. */
-/* .message.assistant::before {
+.message.assistant::before {
     content: "";
     position: absolute;
     left: -52px;
@@ -480,7 +486,7 @@ body {
     background-size: cover;
     background-position: center;
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
-} */
+}
 
 /* System notes, like "Assistant initialized!" or error messages. */
 .message.system {
