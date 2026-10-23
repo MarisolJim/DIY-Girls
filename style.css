@@ -1,22 +1,103 @@
-/* ==============================================
-   STUDENTS: CUSTOMIZE THESE COLORS & FONTS!
-   Change a value, save, and refresh to see it.
-   ============================================== */
+/* =====================================================================
+   STYLE.CSS: THE LOOK OF YOUR CHATBOT
+   =====================================================================
+   This file controls how everything LOOKS: colors, fonts, sizes,
+   spacing, rounded corners, shadows and animations.
+     - What is ON the page (text, boxes, buttons) lives in index.html.
+     - What the chatbot DOES (sending messages, talking to the AI)
+       lives in script.js.
+
+   HOW TO READ CSS
+   ---------------
+   A CSS "rule" looks like this:
+
+       .message.user {        <- the SELECTOR: which part of the page to style
+           color: #fff;       <- a DECLARATION, written  property: value;
+       }
+
+   - A selector that starts with a dot, like .header, styles every
+     element in index.html that has class="header".
+   - A selector with no dot, like body or button, styles every element
+     with that tag name.
+   - Two classes stuck together, like .message.user, means "an element
+     that has BOTH classes".
+   - A space between selectors, like .header h1, means "an h1 that is
+     somewhere INSIDE the .header".
+   - ::before and ::after add a decoration that is not written in the
+     HTML at all. CSS creates it.
+   - :hover, :focus, :active and :disabled style an element only while
+     the mouse is over it, while you have clicked into it, while it is
+     being pressed, or while it is turned off.
+   - Every declaration ends with a semicolon ( ; ). If you forget one,
+     the next line usually stops working.
+   - Text between a slash-star and a star-slash is a COMMENT (like this
+     one). The browser ignores comments; they are notes for humans.
+
+   COLORS
+   ------
+   - #4721a7
+       A "hex" color, written #RRGGBB: two digits each for red, green
+       and blue, from 00 (none) to ff (full). #ffffff is white,
+       #000000 is black. Search "color picker" on Google to find codes.
+   - #fff
+       Short hex: #fff is the same as #ffffff.
+   - rgba(255, 255, 255, 0.16)
+       Red, green, blue (each 0 to 255) plus ALPHA, which is how solid
+       the color is: 0 = invisible, 0.5 = half see-through, 1 = solid.
+
+   SIZES
+   -----
+   - px   pixels: a fixed size on the screen.
+   - rem  multiples of the page's normal text size (1rem is about 16px).
+          So 2rem is twice the normal text size.
+   - em   multiples of the text size of the element itself.
+   - %    a percent of the box that contains the element.
+   - vh   a percent of the browser window's height (100vh = full height).
+   - s    seconds, used for animations and transitions.
+
+   SPACING SHORTCUTS
+   -----------------
+   padding and margin can take 1 to 4 values:
+     padding: 1rem;                 -> all four sides
+     padding: 1rem 2rem;            -> top+bottom, then left+right
+     padding: 1rem 2rem 3rem;       -> top, left+right, bottom
+     padding: 1rem 2rem 3rem 4rem;  -> top, right, bottom, left (clockwise)
+   padding = space INSIDE a box's edge. margin = space OUTSIDE it.
+
+   HOW TO EXPERIMENT
+   -----------------
+   1. Change ONE value.
+   2. Save the file (Ctrl+S).
+   3. Refresh the browser (F5).
+   If something breaks, press Ctrl+Z to undo, then save again.
+   The quickest wins are the variables in section 1, right below.
+   Tip: press Ctrl+F and search a section name (like "INPUT AREA") to
+   jump straight to it.
+   ===================================================================== */
+
+
+/* =====================================================================
+   1. THEME VARIABLES (START HERE!)
+   =====================================================================
+   :root means "the whole page". Each line inside it creates a VARIABLE:
+   a name that starts with two dashes (like --accent) and stores a value.
+   Rules further down use the value by writing var(--accent).
+   Change a variable once here, and every place that uses it changes. */
 :root {
-    /* Your assistant's main colors */
-    --primary-color: #4721a7;   /* main brand violet   */
-    --secondary-color: #0f050d; /* pink partner color  */
-    --accent: #ffd166;          /* highlight / glow     */
+    /* ----- Your assistant's main colors ----- */
+    --primary-color: #4721a7;   /* Main brand color (deep violet). Used in the header gradient, user message bubbles, buttons, the outline around a box you click into, and the 1st typing dot. */
+    --secondary-color: #0f050d; /* Partner color (almost black). It is the second half of every gradient (header, user bubbles, buttons) and the 2nd typing dot. Try a bright color like #e05cc8 (pink) for a bolder look. */
+    --accent: #ffd166;          /* Highlight color (sunny yellow). Used for headings inside the bot's replies and the 3rd typing dot. */
 
-    /* Backgrounds & text */
-    --background: #0f1030;      /* page background      */
-    --surface: #1b1d44;         /* cards & panels       */
-    --surface-2: #262a5a;       /* inputs & inner areas */
-    --text-primary: #f2f1ff;    /* main text            */
-    --text-secondary: #a7abdb;  /* softer labels        */
+    /* ----- Backgrounds & text ----- */
+    --background: #0f1030;      /* The color behind the whole page (dark navy). */
+    --surface: #1b1d44;         /* The color of the big cards: the chat box. */
+    --surface-2: #262a5a;       /* A slightly lighter color for "inner" areas: the bot's message bubbles and the typing boxes. */
+    --text-primary: #f2f1ff;    /* Main text color (almost white). If you make the backgrounds light, make this dark! */
+    --text-secondary: #a7abdb;  /* Softer text color (light lavender) for labels and small notes. */
 
-    /* The emoji your assistant uses as its face */
-    --bot-face: "🤖";
+    /* ----- The emoji your assistant uses as its face ----- */
+    --bot-face: "🤖";           /* Shown in the round badge at the top AND next to every bot message. Swap in any emoji, like "🦄", "🐱" or "🌟". Keep the quotation marks! */
     /* Want a picture instead? Comment out the line above, uncomment
        the line below, and point it at your image file or URL.
        Then scroll to the two ".header__badge::before" and
@@ -24,80 +105,107 @@
        swap in their commented-out picture versions too. */
     /* --bot-face: url("assets/bot-face.png"); */
 
-    /* Motion */
-    --transition-speed: 0.25s;
+    /* ----- Motion ----- */
+    --transition-speed: 0.25s;  /* How fast things smoothly change, like a button lifting when you hover over it. Bigger = slower (try 0.6s). */
 
-    /* (You usually don't need to touch these) */
-    --brand-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    --border: rgba(54, 13, 13, 0.08);
-    --shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    /* ----- (You usually don't need to touch these) ----- */
+    --brand-gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); /* A smooth fade from your primary color to your secondary color. 135deg makes it run diagonally, from top-left to bottom-right. Try 90deg for left-to-right. */
+    --border: rgba(54, 13, 13, 0.08);           /* The color of thin outlines around cards and bubbles. The 0.08 at the end makes it barely visible. */
+    --shadow: 0 20px 45px rgba(0, 0, 0, 0.45);  /* The shadow under the header and cards. The numbers are: sideways shift, downward shift (20px), blur amount (45px), then the shadow color. */
 }
 
+
+/* =====================================================================
+   2. PAGE BASICS
+   ===================================================================== */
+
+/* The star * means "every single element on the page".
+   This wipes out the browser's built-in spacing so you start fresh. */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+    margin: 0;                  /* Removes the default space OUTSIDE every element. */
+    padding: 0;                 /* Removes the default space INSIDE every element. */
+    box-sizing: border-box;     /* Makes width and height include the padding and border, so sizes are easier to predict. */
 }
 
+/* body is the whole visible page. */
 body {
-    font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif;
-    color: var(--text-primary);
-    line-height: 1.6;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    /* Soft glowing background so the page feels alive */
+    font-family: 'Nunito', 'Segoe UI', system-ui, sans-serif; /* The font for all text. The browser uses the first one it has. Nunito is loaded from Google Fonts in index.html; the others are backups. */
+    color: var(--text-primary);  /* Default text color for the whole page. */
+    line-height: 1.6;            /* Space between lines of text: 1.6 times the text size. Bigger = airier. */
+    min-height: 100vh;           /* The page is always at least as tall as the browser window. */
+    display: flex;               /* Turns on "flexbox", a layout mode that lines up the header and the main area... */
+    flex-direction: column;      /* ...stacked top to bottom (a column) instead of side by side. */
+    /* Soft glowing background so the page feels alive.
+       Each radial-gradient is a round, blurry glow. Read them like:
+       radial-gradient(SIZE at LEFT-POSITION TOP-POSITION, GLOW COLOR, fades to transparent by X%).
+       The first glow in the list is drawn on top. */
     background:
-        radial-gradient(60rem 60rem at 12% -10%, rgba(139, 92, 255, 0.35), transparent 60%),
-        radial-gradient(50rem 50rem at 110% 10%, rgba(224, 92, 200, 0.28), transparent 55%),
-        radial-gradient(45rem 45rem at 50% 120%, rgba(255, 209, 102, 0.14), transparent 60%),
-        var(--background);
-    background-attachment: fixed;
+        radial-gradient(60rem 60rem at 12% -10%, rgba(139, 92, 255, 0.35), transparent 60%),  /* Purple glow peeking in from the top-left. */
+        radial-gradient(50rem 50rem at 110% 10%, rgba(224, 92, 200, 0.28), transparent 55%), /* Pink glow from just off the right edge. */
+        radial-gradient(45rem 45rem at 50% 120%, rgba(255, 209, 102, 0.14), transparent 60%),/* Faint yellow glow from below the bottom. */
+        var(--background);       /* The solid background color underneath all the glows. */
+    background-attachment: fixed; /* Keeps the glows still while you scroll, instead of scrolling away with the page. */
 }
 
-/* ---------------- Header ---------------- */
+
+/* =====================================================================
+   3. HEADER (the colorful banner at the top)
+   ===================================================================== */
+
+/* The whole banner: <div class="header"> in index.html. */
 .header {
-    position: relative;
-    overflow: hidden;
-    padding: 2.5rem 2rem 2.75rem;
-    text-align: center;
-    background: var(--brand-gradient);
-    border-bottom: 1px solid var(--border);
-    box-shadow: var(--shadow);
+    position: relative;         /* Lets the shine effect below be placed exactly on top of the header. */
+    overflow: hidden;           /* Hides anything that pokes outside the header (so the shine doesn't spill out). */
+    padding: 2.5rem 2rem 2.75rem; /* Space inside the banner: 2.5rem top, 2rem left and right, 2.75rem bottom. Bigger = taller banner. */
+    text-align: center;         /* Centers the title and text. Try left or right. */
+    background: var(--brand-gradient); /* Fills the banner with your primary-to-secondary gradient. */
+    border-bottom: 1px solid var(--border); /* A thin line along the bottom: 1px thick, solid, in the border color. */
+    box-shadow: var(--shadow);  /* Adds the shadow under the banner. */
 }
 
-/* A slow shine sweeping across the header for personality */
+/* A slow shine sweeping across the header for personality.
+   ::after creates an invisible extra layer on top of the header. */
 .header::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%);
-    transform: translateX(-120%);
-    animation: shine 6s ease-in-out infinite;
+    content: "";                /* Required for ::after to appear. It is empty because it is just a decoration. */
+    position: absolute;         /* Places this layer freely on top of the header... */
+    inset: 0;                   /* ...stretched to touch all four edges. */
+    background: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.25) 50%, transparent 60%); /* A thin diagonal stripe of see-through white (the "shine"), with clear space on both sides. */
+    transform: translateX(-120%); /* Starts the shine pushed off to the left, out of sight. */
+    animation: shine 6s ease-in-out infinite; /* Runs the "shine" animation below: 6 seconds per sweep, smooth start and stop, forever. Set to "none" to turn it off. */
 }
 
+/* @keyframes describes an animation step by step.
+   The percentages are points in time: 0% = start, 100% = end. */
 @keyframes shine {
-    0%, 60% { transform: translateX(-120%); }
-    85%, 100% { transform: translateX(120%); }
+    0%, 60% { transform: translateX(-120%); }  /* For the first 60% of the time, wait off to the left. */
+    85%, 100% { transform: translateX(120%); } /* By 85%, it has swept all the way off to the right. */
 }
 
+/* The round circle that holds your bot's face. */
 .header__badge {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 74px;
-    height: 74px;
-    margin-bottom: 0.75rem;
-    font-size: 2.4rem;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.16);
-    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35), 0 8px 20px rgba(0, 0, 0, 0.3);
-    animation: float 4s ease-in-out infinite;
+    position: relative;         /* Keeps the badge above the shine layer. */
+    display: inline-flex;       /* Makes the badge a flexbox so the face can be centered inside it... */
+    align-items: center;        /* ...centered top to bottom... */
+    justify-content: center;    /* ...and centered left to right. */
+    width: 74px;                /* Width of the circle. */
+    height: 74px;               /* Height of the circle. Keep it the same as the width so it stays round. */
+    margin-bottom: 0.75rem;     /* Space between the circle and the title below it. */
+    font-size: 2.4rem;          /* Size of the emoji face. */
+    border-radius: 50%;         /* Rounds the corners all the way, turning the square into a circle. Try 20% for a rounded square. */
+    background: rgba(255, 255, 255, 0.16); /* A see-through white fill. */
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35), 0 8px 20px rgba(0, 0, 0, 0.3); /* Two shadows: "inset" draws a 2px white ring on the inside edge; the second is a soft dark shadow underneath. */
+    animation: float 4s ease-in-out infinite; /* Runs the "float" animation below so the badge gently bobs up and down. */
 }
-.header__badge::before { content: var(--bot-face); }
+.header__badge::before { content: var(--bot-face); } /* Puts your bot-face emoji (from section 1) inside the circle. */
 /* Picture version: comment out the rule above, uncomment this one
-   (and set --bot-face to a url() above). */
+   (and set --bot-face to a url() above).
+   What it does, line by line:
+     content: "";                  -> creates an empty layer to hold the picture
+     width / height: 100%;         -> the layer fills the whole circle
+     border-radius: 50%;           -> trims the picture into a circle
+     background-image: ...;        -> shows your picture
+     background-size: cover;       -> scales the picture to fill the circle without stretching
+     background-position: center;  -> keeps the middle of the picture in the middle */
 /* .header__badge::before {
     content: "";
     width: 100%;
@@ -108,218 +216,258 @@ body {
     background-position: center;
 } */
 
+/* The bobbing animation used by the badge. */
 @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-7px); }
+    0%, 100% { transform: translateY(0); }  /* Start and end in the normal spot. */
+    50% { transform: translateY(-7px); }    /* Halfway through, rise 7px. Bigger number = bigger bob. */
 }
 
+/* The big title ("Chatbot"). */
 .header h1 {
-    position: relative;
-    font-family: 'Baloo 2', 'Nunito', sans-serif;
-    font-size: 2.6rem;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    position: relative;         /* Keeps the title above the shine layer. */
+    font-family: 'Baloo 2', 'Nunito', sans-serif; /* A rounder, bolder font for the title. Baloo 2 is loaded from Google Fonts in index.html. */
+    font-size: 2.6rem;          /* Title size. */
+    font-weight: 800;           /* How thick the letters are: 400 is normal, 700 is bold, 800 is extra bold. */
+    letter-spacing: 0.5px;      /* Adds a little extra space between letters. */
+    text-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* A soft shadow behind the letters: 0 sideways, 3px down, 10px blur, light black. */
 }
 
+/* The line under the title ("Built by: ..."). */
 .header p {
-    position: relative;
-    font-size: 1.05rem;
-    font-weight: 600;
-    opacity: 0.95;
+    position: relative;         /* Keeps this text above the shine layer. */
+    font-size: 1.05rem;         /* Slightly bigger than normal text. */
+    font-weight: 600;           /* Semi-bold. */
+    opacity: 0.95;              /* 95% solid, so it looks a tiny bit softer than the title. */
 }
 
+/* The little "Online & ready" pill. */
 .header__status {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    margin-top: 0.6rem;
-    padding: 0.25rem 0.8rem;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.2);
+    position: relative;         /* Keeps the pill above the shine layer. */
+    display: inline-flex;       /* Lines up the green dot and the words side by side... */
+    align-items: center;        /* ...centered top to bottom. */
+    gap: 0.4rem;                /* Space between the green dot and the words. */
+    margin-top: 0.6rem;         /* Space above the pill. */
+    padding: 0.25rem 0.8rem;    /* Space inside the pill: 0.25rem top and bottom, 0.8rem left and right. */
+    font-size: 0.8rem;          /* Small text. */
+    font-weight: 700;           /* Bold. */
+    letter-spacing: 0.4px;      /* A little extra space between letters. */
+    text-transform: uppercase;  /* Shows the words in ALL CAPS, even though index.html types them normally. */
+    border-radius: 999px;       /* A huge rounding makes the ends perfectly round (a "pill" shape). */
+    background: rgba(0, 0, 0, 0.2); /* See-through black behind the words. */
 }
+/* The green "online" dot at the start of the pill. */
 .header__status::before {
-    content: "";
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #43f5a0;
-    box-shadow: 0 0 0 0 rgba(67, 245, 160, 0.7);
-    animation: pulse 2s infinite;
+    content: "";                /* Creates an empty decoration (the dot). */
+    width: 9px;                 /* Dot width. */
+    height: 9px;                /* Dot height. */
+    border-radius: 50%;         /* Makes it round. */
+    background: #43f5a0;        /* Bright green. Try #ff4d4d for red. */
+    box-shadow: 0 0 0 0 rgba(67, 245, 160, 0.7); /* A green glow ring that starts with size 0 (the pulse animation grows it). */
+    animation: pulse 2s infinite; /* Runs the "pulse" animation below every 2 seconds, forever. */
 }
 
+/* The glowing ring that grows out of the green dot and fades away. */
 @keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(67, 245, 160, 0.7); }
-    70% { box-shadow: 0 0 0 8px rgba(67, 245, 160, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(67, 245, 160, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(67, 245, 160, 0.7); }  /* Start: no ring, fairly solid green. */
+    70% { box-shadow: 0 0 0 8px rgba(67, 245, 160, 0); } /* Grow the ring to 8px wide while fading it to invisible. */
+    100% { box-shadow: 0 0 0 0 rgba(67, 245, 160, 0); }  /* Reset to no ring, ready to pulse again. */
 }
 
-/* ---------------- Layout ---------------- */
+
+/* =====================================================================
+   4. LAYOUT (the area under the header)
+   ===================================================================== */
+
+/* <div class="container"> holds the chat box and keeps it centered. */
 .container {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 2rem 1.25rem 3rem;
-    flex: 1;
-    width: 100%;
+    max-width: 860px;           /* The chat area never gets wider than 860px, even on big screens. Make it bigger for a wider chat. */
+    margin: 0 auto;             /* 0 space on top and bottom; "auto" on the sides centers it on the page. */
+    padding: 2rem 1.25rem 3rem; /* Space inside: 2rem top, 1.25rem left and right, 3rem bottom. */
+    flex: 1;                    /* Stretches to fill leftover height on the page. */
+    width: 100%;                /* Uses the full width, up to the max-width above. */
 }
 
-/* Glassy card look shared by the panels */
+/* Glassy card look shared by the panels.
+   A comma between selectors means "apply this to BOTH". */
 .config-panel,
 .chat-container {
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)), var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    backdrop-filter: blur(6px);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)), var(--surface); /* A faint white sheen fading from top to bottom (180deg), on top of the surface color. */
+    border: 1px solid var(--border); /* A thin outline around the card. */
+    border-radius: 20px;        /* Rounded corners. 0 = sharp corners, bigger = rounder. */
+    box-shadow: var(--shadow);  /* The shadow under the card. */
+    backdrop-filter: blur(6px); /* Blurs whatever is behind the card, for a frosted-glass effect. */
 }
 
+/* The "Configure Your Assistant" panel.
+   It is hidden from visitors right now (see index.html), so these rules
+   only matter if you un-hide it. */
 .config-panel {
-    padding: 1.75rem;
-    margin-bottom: 1.75rem;
+    padding: 1.75rem;           /* Space inside the panel on all sides. */
+    margin-bottom: 1.75rem;     /* Space between this panel and the chat box below. */
 }
 
+/* The panel's heading. */
 .config-panel h2 {
-    font-family: 'Baloo 2', 'Nunito', sans-serif;
-    font-size: 1.45rem;
-    margin-bottom: 1.1rem;
-    background: var(--brand-gradient);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    font-family: 'Baloo 2', 'Nunito', sans-serif; /* Same rounded font as the main title. */
+    font-size: 1.45rem;         /* Heading size. */
+    margin-bottom: 1.1rem;      /* Space under the heading. */
+    background: var(--brand-gradient); /* These four lines make the TEXT itself show your gradient: paint the gradient... */
+    -webkit-background-clip: text; /* ...cut it to the shape of the letters (for Chrome, Safari and Edge)... */
+    background-clip: text;      /* ...the same thing for other browsers... */
+    -webkit-text-fill-color: transparent; /* ...and make the normal text color clear so the gradient shows through. */
 }
 
+/* Each label + box pair in the panel. */
 .config-section {
-    margin-bottom: 1.35rem;
+    margin-bottom: 1.35rem;     /* Space between each label/box pair. */
 }
 
+/* The labels above each box ("Assistant Name:", etc.). */
 .config-section label {
-    display: block;
-    margin-bottom: 0.45rem;
-    color: var(--text-secondary);
-    font-weight: 700;
-    font-size: 0.95rem;
+    display: block;             /* Puts the label on its own line, above its box. */
+    margin-bottom: 0.45rem;     /* Space between the label and its box. */
+    color: var(--text-secondary); /* Softer text color. */
+    font-weight: 700;           /* Bold. */
+    font-size: 0.95rem;         /* Slightly smaller than normal text. */
 }
 
+/* The typing boxes in the panel (one-line inputs and the big textarea). */
 .config-section input,
 .config-section textarea {
-    width: 100%;
-    padding: 0.85rem 1rem;
-    background: var(--surface-2);
-    border: 1.5px solid transparent;
-    border-radius: 12px;
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 1rem;
-    transition: border-color var(--transition-speed), box-shadow var(--transition-speed), background var(--transition-speed);
+    width: 100%;                /* Each box stretches the full width of the panel. */
+    padding: 0.85rem 1rem;      /* Space inside the box around the text. */
+    background: var(--surface-2); /* Box fill color. */
+    border: 1.5px solid transparent; /* An invisible border that turns colored when you click in (see :focus below). */
+    border-radius: 12px;        /* Rounded corners. */
+    color: var(--text-primary); /* Color of the text you type. */
+    font-family: inherit;       /* Use the same font as the rest of the page (boxes don't do this on their own). */
+    font-size: 1rem;            /* Normal text size. */
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed), background var(--transition-speed); /* When the border, glow or fill changes, fade smoothly instead of snapping. */
 }
 
+/* The gray hint text shown in an empty box. */
 .config-section input::placeholder,
 .config-section textarea::placeholder {
-    color: rgba(167, 171, 219, 0.6);
+    color: rgba(167, 171, 219, 0.6); /* Lavender at 60% solid, so it looks faded compared to real text. */
 }
 
+/* How a box looks while you are typing in it (:focus). */
 .config-section input:focus,
 .config-section textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    background: #20244f;
-    box-shadow: 0 0 0 4px rgba(139, 92, 255, 0.22);
+    outline: none;              /* Removes the browser's default outline (we draw our own below). */
+    border-color: var(--primary-color); /* The border turns your primary color. */
+    background: #20244f;        /* The fill gets slightly darker. */
+    box-shadow: 0 0 0 4px rgba(139, 92, 255, 0.22); /* A soft 4px purple glow ring around the box. */
 }
 
+/* Extra rules just for the big multi-line box (System Prompt). */
 .config-section textarea {
-    min-height: 120px;
-    resize: vertical;
-    line-height: 1.55;
+    min-height: 120px;          /* It starts at least 120px tall. */
+    resize: vertical;           /* You can drag its corner to make it taller or shorter, but not wider. */
+    line-height: 1.55;          /* Space between lines of text inside it. */
 }
 
-/* ---------------- Info box ---------------- */
+
+/* =====================================================================
+   5. INFO BOX (the "Instructions:" box inside the config panel)
+   It is commented out in index.html right now, so these rules only
+   matter if you bring it back.
+   ===================================================================== */
 .info-box {
-    background: linear-gradient(135deg, rgba(139, 92, 255, 0.18), rgba(224, 92, 200, 0.14));
-    border: 1px solid rgba(139, 92, 255, 0.4);
-    border-radius: 14px;
-    padding: 1rem 1.1rem;
-    margin-bottom: 1.35rem;
-    color: var(--text-secondary);
-    font-size: 0.97rem;
+    background: linear-gradient(135deg, rgba(139, 92, 255, 0.18), rgba(224, 92, 200, 0.14)); /* A faint purple-to-pink diagonal fill. */
+    border: 1px solid rgba(139, 92, 255, 0.4); /* A thin purple outline. */
+    border-radius: 14px;        /* Rounded corners. */
+    padding: 1rem 1.1rem;       /* Space inside the box. */
+    margin-bottom: 1.35rem;     /* Space under the box. */
+    color: var(--text-secondary); /* Softer text color. */
+    font-size: 0.97rem;         /* Just under normal text size. */
 }
 
+/* The bold word "Instructions:" inside the box. */
 .info-box strong {
-    color: var(--text-primary);
+    color: var(--text-primary); /* Brighter text so it stands out. */
 }
 
-/* ---------------- Chat ---------------- */
+
+/* =====================================================================
+   6. CHAT BOX & MESSAGE BUBBLES
+   ===================================================================== */
+
+/* The whole chat card (messages on top, typing area on the bottom). */
 .chat-container {
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    height: 540px;
+    overflow: hidden;           /* Keeps everything inside the rounded corners. */
+    display: flex;              /* Flexbox layout... */
+    flex-direction: column;     /* ...stacking the messages area above the typing area. */
+    height: 540px;              /* How tall the chat box is. Make it bigger to see more messages at once. */
 }
 
+/* The scrolling area where messages appear (<div id="messages">). */
 .messages {
-    flex: 1;
-    padding: 1.5rem;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 1.1rem;
+    flex: 1;                    /* Takes up all the height the typing area doesn't use. */
+    padding: 1.5rem;            /* Space between the messages and the edges of the box. */
+    overflow-y: auto;           /* Adds a scrollbar when there are too many messages to fit. */
+    display: flex;              /* Flexbox layout... */
+    flex-direction: column;     /* ...one message under another... */
+    gap: 1.1rem;                /* ...with 1.1rem of space between messages. */
 }
 
+/* Styles shared by EVERY message bubble (user, bot and system). */
 .message {
-    position: relative;
-    padding: 0.9rem 1.15rem;
-    border-radius: 18px;
-    max-width: 78%;
-    font-size: 1rem;
-    animation: pop 0.32s cubic-bezier(0.22, 1, 0.36, 1);
-    word-wrap: break-word;
+    position: relative;         /* Lets the bot's face be placed next to its bubble. */
+    padding: 0.9rem 1.15rem;    /* Space inside the bubble around the text. */
+    border-radius: 18px;        /* Rounded bubble corners. */
+    max-width: 78%;             /* A bubble can be at most 78% of the chat width, so long messages wrap. */
+    font-size: 1rem;            /* Message text size. Try 1.1rem for bigger text. */
+    animation: pop 0.32s cubic-bezier(0.22, 1, 0.36, 1); /* New bubbles "pop" in using the animation below. The cubic-bezier numbers make it start fast and settle gently. */
+    word-wrap: break-word;      /* Breaks up very long words or links so they don't stick out of the bubble. */
 }
 
+/* The pop-in animation for new messages. */
 @keyframes pop {
-    from { opacity: 0; transform: translateY(12px) scale(0.98); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: translateY(12px) scale(0.98); } /* Starts invisible, 12px lower, and a tiny bit smaller... */
+    to { opacity: 1; transform: translateY(0) scale(1); }         /* ...and ends fully visible, in place, at full size. */
 }
 
-/* User bubble — brand gradient, tucked to the right */
+/* User bubble: brand gradient, tucked to the right */
 .message.user {
-    align-self: flex-end;
-    margin-left: auto;
-    background: var(--brand-gradient);
-    color: #fff;
-    font-weight: 600;
-    border-bottom-right-radius: 6px;
-    box-shadow: 0 8px 18px rgba(139, 92, 255, 0.35);
+    align-self: flex-end;       /* Pushes your messages to the right side. */
+    margin-left: auto;          /* Also pushes it right, as a backup. */
+    background: var(--brand-gradient); /* Fills your bubble with the brand gradient. Try var(--accent) for a solid color. */
+    color: #fff;                /* White text. */
+    font-weight: 600;           /* Semi-bold text. */
+    border-bottom-right-radius: 6px; /* Makes the bottom-right corner less round, like a speech-bubble "tail". */
+    box-shadow: 0 8px 18px rgba(139, 92, 255, 0.35); /* A purple glow under the bubble. */
 }
 
-/* Assistant bubble — glassy card with a floating avatar face */
+/* Assistant bubble: glassy card with a floating avatar face */
 .message.assistant {
-    align-self: flex-start;
-    margin-left: 52px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-bottom-left-radius: 6px;
+    align-self: flex-start;     /* Keeps the bot's messages on the left side. */
+    margin-left: 52px;          /* Leaves 52px of room on the left for the bot's round face. */
+    background: var(--surface-2); /* Bubble fill color. */
+    border: 1px solid var(--border); /* Thin outline. */
+    border-bottom-left-radius: 6px; /* Makes the bottom-left corner less round, like a speech-bubble "tail". */
 }
+/* The little round face next to each bot message. */
 .message.assistant::before {
-    content: var(--bot-face);
-    position: absolute;
-    left: -52px;
-    top: -2px;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.25rem;
-    border-radius: 50%;
-    background: var(--brand-gradient);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+    content: var(--bot-face);   /* Shows your bot-face emoji from section 1. */
+    position: absolute;         /* Places the face freely, relative to its bubble... */
+    left: -52px;                /* ...52px to the LEFT of the bubble (in the space saved above)... */
+    top: -2px;                  /* ...and 2px above the bubble's top edge. */
+    width: 40px;                /* Width of the face circle. */
+    height: 40px;               /* Height of the face circle. */
+    display: flex;              /* Flexbox, so the emoji can be centered... */
+    align-items: center;        /* ...top to bottom... */
+    justify-content: center;    /* ...and left to right. */
+    font-size: 1.25rem;         /* Size of the emoji. */
+    border-radius: 50%;         /* Makes the face background a circle. */
+    background: var(--brand-gradient); /* Fills the circle with your brand gradient. */
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35); /* Soft shadow under the circle. */
 }
 /* Picture version: comment out the rule above, uncomment this one
-   (and set --bot-face to a url() above). */
+   (and set --bot-face to a url() above).
+   It works like the emoji version, except it shows your picture with
+   background-image, and background-size: cover makes the picture fill
+   the circle without stretching. */
 /* .message.assistant::before {
     content: "";
     position: absolute;
@@ -334,138 +482,176 @@ body {
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 } */
 
+/* System notes, like "Assistant initialized!" or error messages. */
 .message.system {
-    align-self: center;
-    text-align: center;
-    max-width: 100%;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--text-secondary);
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px dashed var(--border);
-    border-radius: 999px;
-    padding: 0.4rem 1rem;
+    align-self: center;         /* Centered in the chat. */
+    text-align: center;         /* Centered text. */
+    max-width: 100%;            /* Can use the full width of the chat. */
+    font-size: 0.85rem;         /* Smaller text. */
+    font-weight: 700;           /* Bold. */
+    color: var(--text-secondary); /* Softer text color. */
+    background: rgba(255, 255, 255, 0.05); /* A very faint white fill. */
+    border: 1px dashed var(--border); /* A thin DASHED outline. Try dotted or solid. */
+    border-radius: 999px;       /* Pill shape. */
+    padding: 0.4rem 1rem;       /* Space inside the pill. */
 }
 
-/* ---------------- Input area ---------------- */
+
+/* =====================================================================
+   7. INPUT AREA (where you type and press Send)
+   ===================================================================== */
+
+/* The strip at the bottom of the chat box. */
 .input-area {
-    display: flex;
-    gap: 0.75rem;
-    padding: 1.1rem 1.25rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-top: 1px solid var(--border);
+    display: flex;              /* Puts the text box and the Send button side by side. */
+    gap: 0.75rem;               /* Space between the text box and the button. */
+    padding: 1.1rem 1.25rem;    /* Space inside the strip. */
+    background: rgba(0, 0, 0, 0.2); /* A see-through dark fill to set it apart from the messages. */
+    border-top: 1px solid var(--border); /* A thin line along the top of the strip. */
 }
 
+/* The "Type your message here..." box. */
 .input-area input {
-    flex: 1;
-    padding: 0.9rem 1.1rem;
-    background: var(--surface-2);
-    border: 1.5px solid transparent;
-    border-radius: 999px;
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 1rem;
-    transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+    flex: 1;                    /* Stretches to fill all the space the Send button doesn't use. */
+    padding: 0.9rem 1.1rem;     /* Space inside the box around your text. */
+    background: var(--surface-2); /* Box fill color. */
+    border: 1.5px solid transparent; /* Invisible border that becomes colored when you click in. */
+    border-radius: 999px;       /* Pill shape. Try 8px for a rounded rectangle. */
+    color: var(--text-primary); /* Color of the text you type. */
+    font-family: inherit;       /* Same font as the rest of the page. */
+    font-size: 1rem;            /* Normal text size. */
+    transition: border-color var(--transition-speed), box-shadow var(--transition-speed); /* Fades the border and glow smoothly when you click in or out. */
 }
 
-.input-area input::placeholder { color: rgba(167, 171, 219, 0.6); }
+.input-area input::placeholder { color: rgba(167, 171, 219, 0.6); } /* The faded "Type your message here..." hint color. */
 
+/* How the message box looks while you are typing in it. */
 .input-area input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 4px rgba(117, 93, 176, 0.22);
+    outline: none;              /* Removes the browser's default outline. */
+    border-color: var(--primary-color); /* The border turns your primary color. */
+    box-shadow: 0 0 0 4px rgba(117, 93, 176, 0.22); /* A soft 4px purple glow ring. */
 }
 
+/* Every button on the page (right now, just "Send"). */
 button {
-    padding: 0.9rem 1.7rem;
-    background: var(--brand-gradient);
-    color: #fff;
-    border: none;
-    border-radius: 999px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 1rem;
-    font-weight: 800;
-    letter-spacing: 0.4px;
-    cursor: pointer;
-    transition: transform var(--transition-speed), box-shadow var(--transition-speed), opacity var(--transition-speed);
-    box-shadow: 0 8px 18px rgba(139, 92, 255, 0.4);
+    padding: 0.9rem 1.7rem;     /* Space inside the button: makes it bigger or smaller. */
+    background: var(--brand-gradient); /* Button fill. */
+    color: #fff;                /* White button text. */
+    border: none;               /* Removes the browser's default gray border. */
+    border-radius: 999px;       /* Pill shape. */
+    font-family: 'Nunito', sans-serif; /* Button font. */
+    font-size: 1rem;            /* Button text size. */
+    font-weight: 800;           /* Extra bold. */
+    letter-spacing: 0.4px;      /* A little extra space between letters. */
+    cursor: pointer;            /* Shows the pointing-hand mouse cursor over the button. */
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed), opacity var(--transition-speed); /* Smoothly animates the lift, the glow and the fading below. */
+    box-shadow: 0 8px 18px rgba(139, 92, 255, 0.4); /* A purple glow under the button. */
 }
 
+/* When the mouse is over the button. */
 button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 24px rgba(224, 92, 200, 0.45);
+    transform: translateY(-2px); /* Lifts the button up 2px. */
+    box-shadow: 0 12px 24px rgba(224, 92, 200, 0.45); /* Swaps to a bigger, pink glow. */
 }
 
-button:active { transform: translateY(0); }
+button:active { transform: translateY(0); } /* While you are clicking, the button drops back down, so it feels pressed. */
 
+/* While the bot is thinking, the button is turned off (disabled). */
 button:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
+    opacity: 0.55;              /* Fades the button to 55% so it looks turned off. */
+    cursor: not-allowed;        /* Shows the "no" cursor. */
+    transform: none;            /* No lifting. */
+    box-shadow: none;           /* No glow. */
 }
 
-/* ---------------- Typing indicator ---------------- */
-/* Three bouncing dots (styled from the .loading span the script adds) */
+
+/* =====================================================================
+   8. TYPING INDICATOR (the dots shown while the bot is "Thinking...")
+   ===================================================================== */
+/* Three bouncing dots (styled from the .loading span the script adds).
+   There is really only ONE dot; the other two are copies drawn with
+   box-shadow. */
 .loading {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    margin-right: 3px;
-    border-radius: 50%;
-    background: var(--primary-color);
-    animation: bounce 1s infinite ease-in-out;
+    display: inline-block;      /* Lets the dot have a width and height while sitting in a line of text. */
+    width: 8px;                 /* Dot width. */
+    height: 8px;                /* Dot height. */
+    margin-right: 3px;          /* Space after the dot. */
+    border-radius: 50%;         /* Makes the dot round. */
+    background: var(--primary-color); /* Color of dot #1. */
+    animation: bounce 1s infinite ease-in-out; /* Runs the "bounce" animation below once a second, forever. */
     box-shadow:
-        14px 0 0 var(--secondary-color),
-        28px 0 0 var(--accent);
+        14px 0 0 var(--secondary-color), /* Dot #2: a copy 14px to the right, in your secondary color. */
+        28px 0 0 var(--accent);          /* Dot #3: a copy 28px to the right, in your accent color. */
 }
 
+/* The bounce animation for the dots. */
 @keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); opacity: 0.6; }
-    40% { transform: translateY(-6px); opacity: 1; }
+    0%, 80%, 100% { transform: translateY(0); opacity: 0.6; } /* Most of the time: resting in place, a bit faded. */
+    40% { transform: translateY(-6px); opacity: 1; }          /* At 40%: jumps up 6px and goes fully solid. */
 }
 
-/* ---------------- Scrollbar ---------------- */
-.messages::-webkit-scrollbar { width: 9px; }
-.messages::-webkit-scrollbar-track { background: transparent; }
+
+/* =====================================================================
+   9. SCROLLBAR (inside the messages area)
+   These ::-webkit-scrollbar rules work in Chrome, Edge and Safari.
+   Firefox ignores them and shows its normal scrollbar.
+   ===================================================================== */
+.messages::-webkit-scrollbar { width: 9px; } /* How thick the scrollbar is. */
+.messages::-webkit-scrollbar-track { background: transparent; } /* The groove the scrollbar slides in: invisible. */
+/* The part of the scrollbar you drag (the "thumb"). */
 .messages::-webkit-scrollbar-thumb {
-    background: rgba(139, 92, 255, 0.5);
-    border-radius: 999px;
-    border: 2px solid transparent;
-    background-clip: padding-box;
+    background: rgba(139, 92, 255, 0.5); /* Half see-through purple. */
+    border-radius: 999px;       /* Fully rounded ends. */
+    border: 2px solid transparent; /* An invisible border... */
+    background-clip: padding-box; /* ...that the color doesn't fill, so the thumb looks thinner, with space around it. */
 }
-.messages::-webkit-scrollbar-thumb:hover { background: rgba(224, 92, 200, 0.7); background-clip: padding-box; }
+.messages::-webkit-scrollbar-thumb:hover { background: rgba(224, 92, 200, 0.7); background-clip: padding-box; } /* When you hover over the thumb, it turns pink (and keeps its thin look). */
 
-/* ---------------- Markdown content ---------------- */
+
+/* =====================================================================
+   10. FORMATTED TEXT IN THE BOT'S REPLIES
+   The AI often replies with headings, lists and code. These rules style
+   those pieces, but only inside the bot's bubbles (.message.assistant).
+   ===================================================================== */
+
+/* Headings in the bot's replies. */
 .message.assistant h1, .message.assistant h2, .message.assistant h3 {
-    font-family: 'Baloo 2', 'Nunito', sans-serif;
-    margin: 0.5rem 0 0.25rem;
-    color: var(--accent);
+    font-family: 'Baloo 2', 'Nunito', sans-serif; /* Same rounded font as the main title. */
+    margin: 0.5rem 0 0.25rem;   /* 0.5rem above, nothing on the sides, 0.25rem below. */
+    color: var(--accent);       /* Headings use your accent color. */
 }
-.message.assistant p { margin-bottom: 0.5rem; }
-.message.assistant p:last-child { margin-bottom: 0; }
-.message.assistant ul, .message.assistant ol { margin: 0.25rem 0 0.5rem 1.25rem; }
+.message.assistant p { margin-bottom: 0.5rem; }     /* Space after each paragraph. */
+.message.assistant p:last-child { margin-bottom: 0; } /* No extra space after the LAST paragraph, so the bubble doesn't have a gap at the bottom. */
+.message.assistant ul, .message.assistant ol { margin: 0.25rem 0 0.5rem 1.25rem; } /* Bulleted (ul) and numbered (ol) lists: a little space above and below, and pushed 1.25rem in from the left so the bullets show. */
+/* Short bits of code inside a sentence, like a variable name. */
 .message.assistant code {
-    background: rgba(255, 255, 255, 0.12);
-    padding: 0.1em 0.35em;
-    border-radius: 5px;
-    font-family: 'Courier New', monospace;
-    font-size: 0.9em;
+    background: rgba(255, 255, 255, 0.12); /* A faint white highlight behind the code. */
+    padding: 0.1em 0.35em;      /* A little space around the code text. */
+    border-radius: 5px;         /* Slightly rounded corners. */
+    font-family: 'Courier New', monospace; /* A "typewriter" font where every letter is the same width. */
+    font-size: 0.9em;           /* 90% of the text size around it. */
 }
+/* Whole blocks of code (several lines). */
 .message.assistant pre {
-    background: rgba(0, 0, 0, 0.4);
-    padding: 0.8rem;
-    border-radius: 10px;
-    overflow-x: auto;
-    margin: 0.5rem 0;
-    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.4); /* A dark see-through box behind the code. */
+    padding: 0.8rem;            /* Space inside the box. */
+    border-radius: 10px;        /* Rounded corners. */
+    overflow-x: auto;           /* Adds a sideways scrollbar if a line of code is too long. */
+    margin: 0.5rem 0;           /* Space above and below the box. */
+    border: 1px solid var(--border); /* Thin outline. */
 }
-.message.assistant pre code { background: none; padding: 0; }
+.message.assistant pre code { background: none; padding: 0; } /* Code INSIDE a code block skips the small highlight above, since the whole block is already a box. */
 
-/* ---------------- Small screens ---------------- */
+
+/* =====================================================================
+   11. SMALL SCREENS (phones)
+   @media (max-width: 600px) means "only use these rules when the
+   browser window is 600px wide or narrower". To test it, make your
+   browser window skinny and watch the layout change.
+   ===================================================================== */
 @media (max-width: 600px) {
-    .header h1 { font-size: 2rem; }
-    .message { max-width: 88%; }
-    .input-area { flex-direction: column; }
-    button { width: 100%; }
+    .header h1 { font-size: 2rem; }          /* A smaller title so it fits. */
+    .message { max-width: 88%; }             /* Bubbles can be wider, since the screen is narrow. */
+    .input-area { flex-direction: column; }  /* Stacks the Send button UNDER the text box instead of beside it. */
+    button { width: 100%; }                  /* The Send button stretches the full width, so it's easy to tap. */
 }
